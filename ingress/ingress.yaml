@@ -2,23 +2,35 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: uniunity-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
   - host: uniunity
     http:
       paths:
-      - path: /partner(/|$)(.*)
+      - path: /partner
         pathType: ImplementationSpecific
         backend:
           service:
             name: partner-service
             port:
               number: 3003
-      - path: /retailer(/|$)(.*)
+      - path: /retailer
         pathType: ImplementationSpecific
+        backend:
+          service:
+            name: partner-service
+            port:
+              number: 3003
+      - path: /css
+        pathType: Prefix
+        backend:
+          service:
+            name: partner-service
+            port:
+              number: 3003
+      - path: /js
+        pathType: Prefix
         backend:
           service:
             name: partner-service

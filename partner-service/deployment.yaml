@@ -14,21 +14,6 @@ spec:
     spec:
       containers:
       - name: partner-service
-        image: uniunity/partner-service:v0.4
+        image: uniunity/partner-service:v0.6
         ports:
         - containerPort: 3003
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 3003
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          failureThreshold: 3
-
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 3003
-          initialDelaySeconds: 15
-          periodSeconds: 20
-          failureThreshold: 3

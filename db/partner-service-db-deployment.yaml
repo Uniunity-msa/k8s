@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: partner-service-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: partner-service-db
+  template:
+    metadata:
+      labels:
+        app: partner-service-db
+    spec:
+      containers:
+        - name: partner-service-db
+          image: mysql:8
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: partner-service-db-secret
+                  key: PARTNER_SERVICE_DB_ROOT_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: partner-service-db-secret
+                  key: PARTNER_SERVICE_DB_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: partner-service-db-secret
+                  key: PARTNER_SERVICE_DB_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: partner-service-db-secret
+                  key: PARTNER_SERVICE_DB_DATABASE
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: partner-service-db-storage
+      volumes:
+        - name: partner-service-db-storage
+          persistentVolumeClaim:
+            claimName: partner-service-db-pvc
