@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-service
+        image: uniunity/user-service:v0.3
+        ports:
+        - containerPort: 3004
+        env:
+        - name: DB_HOST
+          value: "user-service-db"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_USER
+          value: "user_user"
+        - name: DB_PASSWORD
+          value: "user_password"
+        - name: DB_NAME
+          value: "user_service_db"
+        - name: RABBIT
+          value: "amqp://guest:guest@rabbitmq:5672"
