@@ -12,8 +12,54 @@ spec:
       labels:
         app: partner-service
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z partner-service-db 3306; do
+                echo "Waiting for partner-service-db…"
+                sleep 2
+              done
+        - name: wait-for-rabbitmq
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z rabbitmq 5672; do
+                echo "Waiting for rabbitmq…"
+                sleep 2
+              done
       containers:
       - name: partner-service
-        image: uniunity/partner-service:v0.6
+        image: uniunity/partner-service:v0.9
+        imagePullPolicy: Always
         ports:
         - containerPort: 3003
+        env:
+        - name: MYSQL_HOST
+          value: partner-service-db
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: partner-service-db-secret
+              key: PARTNER_SERVICE_DB_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: partner-service-db-secret
+              key: PARTNER_SERVICE_DB_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: partner-service-db-secret
+              key: PARTNER_SERVICE_DB_DATABASE
+        - name: RABBITMQ_HOST
+          value: rabbitmq
+        - name: RABBITMQ_PORT
+          value: "5672"

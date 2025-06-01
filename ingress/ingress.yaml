@@ -9,14 +9,14 @@ spec:
     http:
       paths:
       - path: /partner
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: partner-service
             port:
               number: 3003
       - path: /retailer
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: partner-service
@@ -43,3 +43,24 @@ spec:
             name: user-service
             port:
               number: 3004
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 3004
+      - path: /university
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 3004
+      - path: /post
+        pathType: Prefix
+        backend:
+          service:
+            name: post-service
+            port:
+              number: 3000
