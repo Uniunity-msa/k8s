@@ -39,10 +39,12 @@ spec:
           ports:
             - containerPort: 3306
           volumeMounts:
-          - mountPath: /var/lib/mysql
-            name: partner-service-db-storage
-          - mountPath: /docker-entrypoint-initdb.d
-            name: init-sql
+            - mountPath: /var/lib/mysql
+              name: partner-service-db-storage
+            - mountPath: /docker-entrypoint-initdb.d
+              name: init-sql
+              readOnly: true
+
       volumes:
         - name: partner-service-db-storage
           persistentVolumeClaim:
