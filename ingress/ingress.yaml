@@ -43,3 +43,18 @@ spec:
             name: user-service
             port:
               number: 3004
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 3004
+      - path: /university
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 3004
+
