@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-service-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-service-db
+  template:
+    metadata:
+      labels:
+        app: post-service-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: post-service-db-secret
+                  key: POST_SERVICE_DB_ROOT_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: post-service-db-secret
+                  key: POST_SERVICE_DB_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: post-service-db-secret
+                  key: POST_SERVICE_DB_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: post-service-db-secret
+                  key: POST_SERVICE_DB_DATABASE
+          volumeMounts:
+            - name: post-db-storage
+              mountPath: /var/lib/mysql
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+      volumes:
+        - name: post-db-storage
+          persistentVolumeClaim:
+            claimName: post-service-db-pvc
+        - name: initdb
+          configMap:
+            name: post-service-db-init-script
