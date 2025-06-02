@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: start-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: start-service
+  template:
+    metadata:
+      labels:
+        app: start-service
+    spec:
+      containers:
+      - name: start-service
+        image: uniunity/start-service:v0.1
+        ports:
+        - containerPort: 3001
