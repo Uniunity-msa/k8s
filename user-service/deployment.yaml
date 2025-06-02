@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: user-service
-        image: uniunity/user-service:v0.7
+        image: uniunity/user-service:v0.8
         ports:
         - containerPort: 3004
         env:
