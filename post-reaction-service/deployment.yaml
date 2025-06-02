@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-reaction-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-reaction-service
+  template:
+    metadata:
+      labels:
+        app: post-reaction-service
+    spec:
+      containers:
+      - name: post-reaction-service
+        image: uniunity/post-reaction-service:v0.7
+        ports:
+        - containerPort: 3002
+        env:
+        - name: MYSQL_HOST
+          value: post-reaction-service-db
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: post-reaction-service-db-secret
+              key: POST_REACTION_SERVICE_DB_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: post-reaction-service-db-secret
+              key: POST_REACTION_SERVICE_DB_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: post-reaction-service-db-secret
+              key: POST_REACTION_SERVICE_DB_DATABASE
+        - name: RABBITMQ_HOST
+          value: "rabbitmq"
+        - name: RABBITMQ_PORT
+          value: "5672"
