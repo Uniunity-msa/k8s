@@ -65,3 +65,17 @@ spec:
             name: post-reaction-service
             port:
               number: 3002
+      - path: /mainpage
+        pathType: Prefix
+        backend:
+          service:
+            name: start-service
+            port:
+              number: 3001
+      - path: /council
+        pathType: Prefix
+        backend:
+          service:
+            name: start-service
+            port:
+              number: 3001
