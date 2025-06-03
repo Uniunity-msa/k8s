@@ -38,6 +38,15 @@ spec:
                   key: PARTNER_SERVICE_DB_DATABASE
           ports:
             - containerPort: 3306
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+              ephemeral-storage: "500Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+              ephemeral-storage: "1Gi"
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: partner-service-db-storage
