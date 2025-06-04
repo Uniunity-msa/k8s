@@ -12,6 +12,27 @@ spec:
       labels:
         app: start-service
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z partner-service-db 3306; do
+                echo "Waiting for partner-service-db…"
+                sleep 2
+              done
+        - name: wait-for-rabbitmq
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z rabbitmq 5672; do
+                echo "Waiting for rabbitmq…"
+                sleep 2
+              done
       containers:
       - name: start-service
         image: uniunity/start-service:v0.17
