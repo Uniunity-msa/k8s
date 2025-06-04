@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main 
+
 env:
   PROJECT_ID: 'uniunity-455912'  # GCP 프로젝트 ID
   GKE_CLUSTER: 'uniunity-k8s'    # GKE 클러스터 이름
@@ -35,7 +36,6 @@ jobs:
         location: '${{ env.GKE_ZONE }}'  # GKE 클러스터 인증
 
     - name: Deploy All Resources to GKE
-      working-directory: k8s  # k8s 디렉토리 기준으로 작업 수행
       run: |
         set -e  # 오류 발생 시 스크립트 중단
 
@@ -68,7 +68,7 @@ jobs:
         # Ingress 리소스 적용
         echo "Applying Ingress"
         kubectl apply -f ingress/ingress.yaml
-        
+
     # 모든 서비스 확인
     - name: List All Services
       run: kubectl get svc -o wide
