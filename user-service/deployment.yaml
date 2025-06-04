@@ -12,9 +12,30 @@ spec:
       labels:
         app: user-service
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z user-service-db 3306; do
+                echo "Waiting for user-service-db…"
+                sleep 2
+              done
+        - name: wait-for-rabbitmq
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z rabbitmq 5672; do
+                echo "Waiting for rabbitmq…"
+                sleep 2
+              done      
       containers:
       - name: user-service
-        image: uniunity/user-service:v0.7
+        image: uniunity/user-service:v0.17
         ports:
         - containerPort: 3004
         env:

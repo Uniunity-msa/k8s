@@ -1,0 +1,62 @@
+name: 'k8s CI/CD to GKE'
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  PROJECT_ID: 'uniunity-455912'
+  GKE_CLUSTER: 'uniunity-k8s'
+  GKE_ZONE: 'asia-northeast3-a'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/742965004576/locations/global/workloadIdentityPools/github-pool/providers/github'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
+        service_account: 'cicd-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+
+    - name: Set GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: '${{ env.GKE_CLUSTER }}'
+        location: '${{ env.GKE_ZONE }}'
+
+    - name: Deploy All Resources to GKE
+      run: |
+        echo "Applying secrets"
+        kubectl apply -f k8s/secret
+
+        echo "Deploying databases"
+        for file in k8s/db/*.yaml; do
+          kubectl apply -f "$file"
+        done
+
+        echo "Deploying RabbitMQ"
+        kubectl apply -f k8s/rabbitmq
+
+        echo "Deploying application services"
+        for service in partner-service post-reaction-service post-service start-service user-service; do
+          echo "Deploying $service"
+          kubectl apply -f k8s/$service/deployment.yaml
+          kubectl rollout status deployment/$service
+          kubectl apply -f k8s/$service/service.yaml
+        done
+
+        echo "Applying Ingress"
+        kubectl apply -f k8s/ingress/ingress.yaml
+
+    - name: List All Services
+      run: kubectl get svc -o wide
