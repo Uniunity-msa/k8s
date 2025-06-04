@@ -35,25 +35,25 @@ spec:
               done
       containers:
       - name: post-reaction-service
-        image: uniunity/post-reaction-service:v0.7
+        image: uniunity/post-reaction-service:202506040611
         ports:
         - containerPort: 3002
         env:
-        - name: MYSQL_HOST
+        - name: DB_HOST
           value: post-reaction-service-db
-        - name: MYSQL_PORT
+        - name: DB_PORT
           value: "3306"
-        - name: MYSQL_USER
+        - name: DB_USER
           valueFrom:
             secretKeyRef:
               name: post-reaction-service-db-secret
               key: POST_REACTION_SERVICE_DB_USER
-        - name: MYSQL_PASSWORD
+        - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: post-reaction-service-db-secret
               key: POST_REACTION_SERVICE_DB_PASSWORD
-        - name: MYSQL_DATABASE
+        - name: DB_DATABASE
           valueFrom:
             secretKeyRef:
               name: post-reaction-service-db-secret
