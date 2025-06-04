@@ -3,60 +3,68 @@ name: 'k8s CI/CD to GKE'
 on:
   push:
     branches:
-      - develop
+      - develop 
 
 env:
-  PROJECT_ID: 'uniunity-455912'
-  GKE_CLUSTER: 'uniunity-k8s'
-  GKE_ZONE: 'asia-northeast3-a'
-  WORKLOAD_IDENTITY_PROVIDER: 'projects/742965004576/locations/global/workloadIdentityPools/github-pool/providers/github-k8s'
+  PROJECT_ID: 'uniunity-455912'  # GCP 프로젝트 ID
+  GKE_CLUSTER: 'uniunity-k8s'    # GKE 클러스터 이름
+  GKE_ZONE: 'asia-northeast3-a'  # GKE 클러스터 위치 (zone)
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/742965004576/locations/global/workloadIdentityPools/github-pool/providers/github-k8s'  # Workload Identity Provider 경로
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
+
     permissions:
       contents: 'read'
-      id-token: 'write'
+      id-token: 'write'  
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4  
 
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
-        workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
-        service_account: 'cicd-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+        workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'  
+        service_account: 'cicd-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'  
 
     - name: Set GKE Credentials
       uses: google-github-actions/get-gke-credentials@v2
       with:
-        cluster_name: '${{ env.GKE_CLUSTER }}'
+        cluster_name: '${{ env.GKE_CLUSTER }}' 
         location: '${{ env.GKE_ZONE }}'
 
     - name: Deploy All Resources to GKE
       run: |
+        # 시크릿 적용
         echo "Applying secrets"
         kubectl apply -f k8s/secret
 
+        # DB 리소스 (deployment, service) 모두 적용
         echo "Deploying databases"
         for file in k8s/db/*.yaml; do
           kubectl apply -f "$file"
         done
 
+        # RabbitMQ 배포
         echo "Deploying RabbitMQ"
-        kubectl apply -f k8s/rabbitmq
+        kubectl apply -f k8s/rabbitmq/rabbitmq-deployment.yaml
+        kubectl apply -f k8s/rabbitmq/rabbitmq-service.yaml
 
+        # 각 서비스별 deployment 및 service 적용
         echo "Deploying application services"
         for service in partner-service post-reaction-service post-service start-service user-service; do
           echo "Deploying $service"
           kubectl apply -f k8s/$service/deployment.yaml
-          kubectl rollout status deployment/$service
+          kubectl rollout status deployment/$service  # 배포 상태 확인
           kubectl apply -f k8s/$service/service.yaml
         done
 
+        # Ingress 리소스 적용
         echo "Applying Ingress"
         kubectl apply -f k8s/ingress/ingress.yaml
-
+        
+    # 모든 서비스 확인
     - name: List All Services
-      run: kubectl get svc -o wide
+      run: kubectl get svc -o wide 
