@@ -37,6 +37,13 @@ jobs:
 
     - name: Deploy All Resources to GKE
       run: |
+        set -e  # 오류 발생 시 중단
+        
+        # 컨피그맵 적용
+        echo "Applying ConfigMaps from sql/"
+        for file in k8s/sql/*-configmap.yaml; do
+          kubectl apply -f "$file"
+        done
         # DB 리소스 (deployment, service) 모두 적용
         echo "Deploying databases"
         for file in k8s/db/*.yaml; do
