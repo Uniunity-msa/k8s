@@ -3,7 +3,7 @@ name: 'k8s CI/CD to GKE'
 on:
   push:
     branches:
-      - develop 
+      - develop
 
 env:
   PROJECT_ID: 'uniunity-455912'  # GCP 프로젝트 ID
@@ -37,10 +37,6 @@ jobs:
 
     - name: Deploy All Resources to GKE
       run: |
-        # 시크릿 적용
-        echo "Applying secrets"
-        kubectl apply -f k8s/secret
-
         # DB 리소스 (deployment, service) 모두 적용
         echo "Deploying databases"
         for file in k8s/db/*.yaml; do
