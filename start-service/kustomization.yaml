@@ -1,7 +1,0 @@
-resources:
-  - deployment.yaml
-  - service.yaml
-
-images:
-  - name: uniunity/start-service
-    newTag: latest
