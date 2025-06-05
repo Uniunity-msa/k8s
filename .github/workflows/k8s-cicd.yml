@@ -71,7 +71,7 @@ jobs:
           else
             echo "변경 없음: $service"
           fi
-        don
+        done
         
     - name: Apply Ingress
       run: kubectl apply -f ingress/ingress.yaml
