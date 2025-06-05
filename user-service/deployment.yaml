@@ -59,6 +59,12 @@ spec:
           value: "guest"
         - name: RABBITMQ_PASSWORD
           value: "guest"
+        - name: JWT_SECRET
+          value: "uni-unity"
+        - name: ACCESS_TOKEN_EXPIRES_IN
+          value: "50m"
+        - name: REFRESH_TOKEN_EXPIRES_IN
+          value: "7d"
         readinessProbe:
           httpGet:
             path: /ready
