@@ -1,0 +1,7 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: uniunity/post-service
+    newTag: latest  # 이 값이 Actions에서 변경됨
