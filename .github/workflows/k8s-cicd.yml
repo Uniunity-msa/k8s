@@ -1,4 +1,4 @@
-name: 'k8s CI/CD to GKE'
+name: 'k8s CI/CD to GKE with Kustomize'
 
 on:
   push:
@@ -6,69 +6,71 @@ on:
       - main
 
 env:
-  PROJECT_ID: 'uniunity-455912'  # GCP 프로젝트 ID
-  GKE_CLUSTER: 'uniunity-k8s'    # GKE 클러스터 이름
-  GKE_ZONE: 'asia-northeast3-a'  # GKE 클러스터 위치 (zone)
-  WORKLOAD_IDENTITY_PROVIDER: 'projects/742965004576/locations/global/workloadIdentityPools/github-pool/providers/github-k8s'  # Workload Identity Provider 경로
+  PROJECT_ID: 'uniunity-455912'
+  GKE_CLUSTER: 'uniunity-k8s'
+  GKE_ZONE: 'asia-northeast3-a'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/742965004576/locations/global/workloadIdentityPools/github-pool/providers/github-k8s'
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
 
     permissions:
       contents: 'read'
-      id-token: 'write'  
+      id-token: 'write'
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4  # 저장소 코드 체크아웃
+      uses: actions/checkout@v4
 
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
-        workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'  
-        service_account: 'cicd-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'  # 서비스 계정 사용
+        workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
+        service_account: 'cicd-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
     - name: Set GKE Credentials
       uses: google-github-actions/get-gke-credentials@v2
       with:
-        cluster_name: '${{ env.GKE_CLUSTER }}' 
-        location: '${{ env.GKE_ZONE }}'  # GKE 클러스터 인증
+        cluster_name: '${{ env.GKE_CLUSTER }}'
+        location: '${{ env.GKE_ZONE }}'
 
-    - name: Deploy All Resources to GKE
+    - name: Install Kustomize
       run: |
-        set -e  # 오류 발생 시 스크립트 중단
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+        sudo mv kustomize /usr/local/bin
 
-        # 컨피그맵 적용
+    - name: Apply ConfigMaps
+      run: |
         echo "Applying ConfigMaps from sql/"
         for file in sql/*-configmap.yaml; do
           kubectl apply -f "$file"
         done
 
-        # DB 리소스 (deployment, service) 모두 적용
+    - name: Deploy Databases
+      run: |
         echo "Deploying databases"
         for file in db/*.yaml; do
           kubectl apply -f "$file"
         done
 
-        # RabbitMQ 배포
-        echo "Deploying RabbitMQ"
+    - name: Deploy RabbitMQ
+      run: |
         kubectl apply -f rabbitmq/rabbitmq-deployment.yaml
         kubectl apply -f rabbitmq/rabbitmq-service.yaml
 
-        # 각 서비스별 deployment 및 service 적용
-        echo "Deploying application services"
+    - name: Deploy Services using Kustomize
+      run: |
         for service in partner-service post-reaction-service post-service start-service user-service; do
-          echo "Deploying $service"
-          kubectl apply -f $service/deployment.yaml
-          kubectl rollout status deployment/$service  # 배포 상태 확인
-          kubectl apply -f $service/service.yaml
+          echo "Deploying $service with kustomize"
+          cd $service
+          kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/$service
+          cd ..
         done
 
-        # Ingress 리소스 적용
-        echo "Applying Ingress"
-        kubectl apply -f ingress/ingress.yaml
+    - name: Apply Ingress
+      run: kubectl apply -f ingress/ingress.yaml
 
-    # 모든 서비스 확인
     - name: List All Services
       run: kubectl get svc -o wide
