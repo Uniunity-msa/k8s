@@ -35,7 +35,7 @@ spec:
               done
       containers:
       - name: post-service
-        image: uniunity/post-service:202506051442
+        image: uniunity/post-service:202506051626
         ports:
         - containerPort: 3000       
         env:
