@@ -35,11 +35,13 @@ spec:
               done
       containers:
       - name: partner-service
-        image: uniunity/partner-service:v2.1
+        image: uniunity/partner-service:202506051220
         imagePullPolicy: Always
         ports:
         - containerPort: 3003
         env:
+        - name: PORT
+          value: "3003"
         - name: MYSQL_HOST
           value: partner-service-db
         - name: MYSQL_PORT
@@ -63,3 +65,21 @@ spec:
           value: rabbitmq
         - name: RABBITMQ_PORT
           value: "5672"
+        - name: RABBITMQ_USER
+          value: "guest"
+        - name: RABBITMQ_PASSWORD
+          value: "guest"
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3003
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3003
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 3
