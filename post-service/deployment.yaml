@@ -66,4 +66,22 @@ spec:
           valueFrom:
             secretKeyRef:
               name: post-service-db-secret
-              key: POST_SERVICE_DB_DATABASE       
+              key: POST_SERVICE_DB_DATABASE
+        - name: RABBITMQ_USER
+          value: "guest"
+        - name: RABBITMQ_PASSWORD
+          value: "guest"
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 3       
