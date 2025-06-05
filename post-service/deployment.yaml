@@ -35,7 +35,7 @@ spec:
               done
       containers:
       - name: post-service
-        image: uniunity/post-service:latest
+        image: uniunity/post-service:202506051345
         imagePullPolicy: Always
         ports:
         - containerPort: 3000       

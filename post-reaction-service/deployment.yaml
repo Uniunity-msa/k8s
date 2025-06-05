@@ -35,7 +35,7 @@ spec:
               done
       containers:
       - name: post-reaction-service
-        image: uniunity/post-reaction-service:latest
+        image: uniunity/post-reaction-service:202506051346
         imagePullPolicy: Always
         ports:
         - containerPort: 3002
