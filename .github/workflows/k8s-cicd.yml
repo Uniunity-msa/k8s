@@ -3,7 +3,7 @@ name: 'k8s CI/CD to GKE'
 on:
   push:
     branches:
-      - main 
+      - develop
 
 env:
   PROJECT_ID: 'uniunity-455912'  # GCP 프로젝트 ID
