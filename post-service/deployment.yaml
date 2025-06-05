@@ -35,7 +35,7 @@ spec:
               done
       containers:
       - name: post-service
-        image: uniunity/post-service:202506051432
+        image: uniunity/post-service:202506051442
         imagePullPolicy: Always
         ports:
         - containerPort: 3000       
@@ -67,6 +67,10 @@ spec:
             secretKeyRef:
               name: post-service-db-secret
               key: POST_SERVICE_DB_DATABASE
+        - name: RABBITMQ_HOST
+          value: "rabbitmq"
+        - name: RABBITMQ_PORT
+          value: "5672"
         - name: RABBITMQ_USER
           value: "guest"
         - name: RABBITMQ_PASSWORD
