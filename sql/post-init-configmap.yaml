@@ -2,10 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: post-init-configmap
-  namespace: default   # 실제 네임스페이스가 다르면 적절히 수정해주세요
+  namespace: default
 data:
   post-init.sql: |
-    -- DB 생성 및 사용
     SET character_set_client = utf8mb4;
     SET character_set_connection = utf8mb4;
     SET character_set_results = utf8mb4;
@@ -13,7 +12,6 @@ data:
     CREATE DATABASE IF NOT EXISTS post_service_db;
     USE post_service_db;
 
-    -- Post 테이블 생성 (user_nickname 추가됨)
     CREATE TABLE IF NOT EXISTS Post (
         post_id INT AUTO_INCREMENT PRIMARY KEY,
         post_title VARCHAR(255),
@@ -29,7 +27,6 @@ data:
         university_id INT NOT NULL
     );
 
-    -- PostImage 테이블 생성
     CREATE TABLE IF NOT EXISTS PostImage (
         image_id INT AUTO_INCREMENT PRIMARY KEY,
         post_id INT NOT NULL,
@@ -38,64 +35,90 @@ data:
         FOREIGN KEY (post_id) REFERENCES Post(post_id)
     );
 
-    -- 더미데이터 삽입
+    -- 성신여자대학교
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('성신 축제 일정 안내', '<p>2024년 축제 일정 안내입니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/sungshin1.png" alt="성신 축제" contenteditable="false">', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/sungshin1.png');
 
-    -- 성신여자대학교 (학교ID: 1)
-    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id)
-    VALUES 
-    ('성신여대 축제 일정 안내', '2024년 성신여대 축제 일정을 안내드립니다.', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1),
-    ('2024 성신 학사일정 공지', '이번 학기의 주요 학사일정을 공지합니다.', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1),
-    ('시험기간 간식행사 안내', '총학생회에서 간식 나눔 이벤트를 진행합니다.', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1),
-    ('제휴 혜택 안내 (1차)', '총학생회와 제휴된 업체의 혜택을 안내드립니다.', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1),
-    ('제휴 혜택 안내 (2차)', '추가 제휴 혜택 정보를 전달드립니다.', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1),
-    ('총학생회 예산 결산안 공지', '2024 상반기 예산 결산 내역을 공유합니다.', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1),
-    ('물품대여 서비스 일시중단 안내', '총학생회 물품대여 서비스가 일시중단됩니다.', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('2024 성신 학사일정 공지', '<p>이번 학기의 학사일정을 안내합니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/sungshin2.png" alt="성신 학사일정" contenteditable="false">', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/sungshin2.png');
 
-    INSERT INTO PostImage (post_id, image_url)
-    VALUES 
-    (1, 'https://storage.googleapis.com/uniunity_bucket/성신1.png'),
-    (2, 'https://storage.googleapis.com/uniunity_bucket/성신2.png'),
-    (3, 'https://storage.googleapis.com/uniunity_bucket/성신3.png'),
-    (4, 'https://storage.googleapis.com/uniunity_bucket/성신4.png'),
-    (5, 'https://storage.googleapis.com/uniunity_bucket/성신5.png'),
-    (6, 'https://storage.googleapis.com/uniunity_bucket/성신6.png'),
-    (7, 'https://storage.googleapis.com/uniunity_bucket/성신7.png');
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('시험기간 간식행사 안내', '<p>총학생회에서 간식 나눔 이벤트를 진행합니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/sungshin3.png" alt="성신 간식" contenteditable="false">', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/sungshin3.png');
 
-    -- 건국대학교 (학교ID: 2)
-    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id)
-    VALUES 
-    ('중간고사 간식행사 공지', '중간고사를 맞이하여 간식 나눔 이벤트를 진행합니다.', '총학생회 공지사항', 'council@konkuk.ac.kr', '총학생회', 2),
-    ('분실물 보관소 이용 안내', '학생회실에서 보관 중인 분실물 목록을 안내드립니다.', '총학생회 공지사항', 'council@konkuk.ac.kr', '총학생회', 2),
-    ('총학생회 재실근무 재개 안내', '학생회실 재실근무가 재개됩니다.', '총학생회 공지사항', 'council@konkuk.ac.kr', '총학생회', 2);
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('제휴 혜택 안내 (1차)', '<p>총학생회와 제휴된 업체의 혜택을 안내드립니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/sungshin4.png" alt="성신 제휴1" contenteditable="false">', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/sungshin4.png');
 
-    INSERT INTO PostImage (post_id, image_url)
-    VALUES 
-    (8, 'https://storage.googleapis.com/uniunity_bucket/건국1.png'),
-    (9, 'https://storage.googleapis.com/uniunity_bucket/건국2.png'),
-    (10, 'https://storage.googleapis.com/uniunity_bucket/건국3.png');
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('제휴 혜택 안내 (2차)', '<p>추가 제휴 혜택 정보를 전달드립니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/sungshin5.png" alt="성신 제휴2" contenteditable="false">', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/sungshin5.png');
 
-    -- 숙명여자대학교 (학교ID: 3)
-    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id)
-    VALUES 
-    ('물품 대여사업 종료 안내', '물품 대여사업이 이번 학기를 끝으로 종료됩니다.', '총학생회 공지사항', 'council@sookmyung.ac.kr', '총학생회', 3),
-    ('오프라인 부스 운영 안내', '행사 기간 중 오프라인 부스 운영 일정을 안내드립니다.', '총학생회 공지사항', 'council@sookmyung.ac.kr', '총학생회', 3),
-    ('기말 수업평가 참여 독려', '기말 수업평가에 꼭 참여해주세요!', '총학생회 공지사항', 'council@sookmyung.ac.kr', '총학생회', 3);
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('총학생회 예산 결산안 공지', '<p>2024 상반기 예산 결산 내역을 공유합니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/sungshin6.png" alt="성신 결산" contenteditable="false">', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/sungshin6.png');
 
-    INSERT INTO PostImage (post_id, image_url)
-    VALUES 
-    (11, 'https://storage.googleapis.com/uniunity_bucket/숙명1.png'),
-    (12, 'https://storage.googleapis.com/uniunity_bucket/숙명2.png'),
-    (13, 'https://storage.googleapis.com/uniunity_bucket/숙명3.png');
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('물품대여 서비스 일시중단 안내', '<p>총학생회 물품대여 서비스가 일시중단됩니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/sungshin7.png" alt="성신 대여중단" contenteditable="false">', '총학생회 공지사항', 'council@sungshin.ac.kr', '총학생회', 1);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/sungshin7.png');
 
-    -- 중앙대학교 (학교ID: 4)
-    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id)
-    VALUES 
-    ('6월의 핫플레이스 추천', '중앙대 주변 핫플레이스를 소개합니다.', '총학생회 공지사항', 'council@cau.ac.kr', '총학생회', 4),
-    ('기말고사 간식행사 일정 안내', '기말 간식행사 일정 및 배부 장소를 공지합니다.', '총학생회 공지사항', 'council@cau.ac.kr', '총학생회', 4),
-    ('중앙대 축제 일정 공지', '다가오는 중앙대 축제 일정을 공유합니다.', '총학생회 공지사항', 'council@cau.ac.kr', '총학생회', 4);
+    -- 건국대학교 (2)
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('중간고사 간식행사 공지', '<p>중간고사를 맞이하여 간식 나눔 이벤트를 진행합니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/건국1.png" alt="건국 간식" contenteditable="false">', '총학생회 공지사항', 'council@konkuk.ac.kr', '총학생회', 2);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/건국1.png');
 
-    INSERT INTO PostImage (post_id, image_url)
-    VALUES 
-    (14, 'https://storage.googleapis.com/uniunity_bucket/중앙1.png'),
-    (15, 'https://storage.googleapis.com/uniunity_bucket/중앙2.png'),
-    (16, 'https://storage.googleapis.com/uniunity_bucket/중앙3.png');
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('분실물 보관소 이용 안내', '<p>학생회실에서 보관 중인 분실물 목록을 안내드립니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/건국2.png" alt="건국 분실물" contenteditable="false">', '총학생회 공지사항', 'council@konkuk.ac.kr', '총학생회', 2);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/건국2.png');
+
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('총학생회 재실근무 재개 안내', '<p>학생회실 재실근무가 재개됩니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/건국3.png" alt="건국 재실근무" contenteditable="false">', '총학생회 공지사항', 'council@konkuk.ac.kr', '총학생회', 2);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/건국3.png');
+
+    -- 숙명여자대학교 (3)
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('물품 대여사업 종료 안내', '<p>물품 대여사업이 이번 학기를 끝으로 종료됩니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/숙명1.png" alt="숙명 대여종료" contenteditable="false">', '총학생회 공지사항', 'council@sookmyung.ac.kr', '총학생회', 3);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/숙명1.png');
+
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('오프라인 부스 운영 안내', '<p>행사 기간 중 오프라인 부스 운영 일정을 안내드립니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/숙명2.png" alt="숙명 부스" contenteditable="false">', '총학생회 공지사항', 'council@sookmyung.ac.kr', '총학생회', 3);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/숙명2.png');
+
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('기말 수업평가 참여 독려', '<p>기말 수업평가에 꼭 참여해주세요!</p><img src="https://storage.googleapis.com/uniunity_bucket/숙명3.png" alt="숙명 평가" contenteditable="false">', '총학생회 공지사항', 'council@sookmyung.ac.kr', '총학생회', 3);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/숙명3.png');
+
+    -- 중앙대학교 (4)
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('6월의 핫플레이스 추천', '<p>중앙대 주변 핫플레이스를 소개합니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/중앙1.png" alt="중앙 핫플" contenteditable="false">', '총학생회 공지사항', 'council@cau.ac.kr', '총학생회', 4);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/중앙1.png');
+
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('기말고사 간식행사 일정 안내', '<p>기말 간식행사 일정 및 배부 장소를 공지합니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/중앙2.png" alt="중앙 간식" contenteditable="false">', '총학생회 공지사항', 'council@cau.ac.kr', '총학생회', 4);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/중앙2.png');
+
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('중앙대 축제 일정 공지', '<p>다가오는 중앙대 축제 일정을 공유합니다.</p><img src="https://storage.googleapis.com/uniunity_bucket/중앙3.png" alt="중앙 축제" contenteditable="false">', '총학생회 공지사항', 'council@cau.ac.kr', '총학생회', 4);
+    SET @last_post_id = LAST_INSERT_ID();
+    INSERT INTO PostImage (post_id, image_url) VALUES (@last_post_id, 'https://storage.googleapis.com/uniunity_bucket/중앙3.png');
+
+    -- 자유게시판 예시 (1 - Sungshin)
+    INSERT INTO Post (post_title, post_content, category, user_email, user_nickname, university_id) VALUES
+    ('자유로운 이야기 한 스푼', '<p>요즘 날씨 너무 좋지 않아요? 🌞</p>', '잡담', 'student@sungshin.ac.kr', '김학생', 1);
