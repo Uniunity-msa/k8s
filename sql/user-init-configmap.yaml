@@ -31,7 +31,9 @@ data:
     )
     VALUES
     (1, '성신여자대학교', '서울특별시 성북구', 1, 'sungshin', 1, 37.5926, 127.0165),
-    (2, '건국대학교', '서울특별시 광진구', 2, 'konkuk', 1, 37.5409, 127.0796);
+    (2, '건국대학교', '서울특별시 광진구', 2, 'konkuk', 1, 37.5409, 127.0796),
+    (3, '숙명여자대학교', '서울특별시 용산구', 3, 'sookmyung', 1, 37.5450, 126.9678),
+    (4, '중앙대학교', '서울특별시 동작구', 4, 'cau', 1, 37.5058, 126.9571);
 
     -- user 테이블
     CREATE TABLE user (
@@ -49,8 +51,20 @@ data:
 
     INSERT INTO user (user_email, user_name, psword, user_type, user_nickname, university_id, user_marketing) VALUES
     ('asdf1234@gmail.com', 'asdf', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'student', 'asdf', 1, 1),
-    ('student@sungshin.ac.kr', '김학생', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'student', '학생1', 1, 1),
-    ('partner@gmail.com', '김상인', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'retailer', '상인1', 2, 1);
+    ('student@sungshin.ac.kr', '김학생', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'student', '성신학생', 1, 1),
+    ('partner@gmail.com', '김상인', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'retailer', '상인1', 1, 1),
+    ('partner2@gmail.com', '성신상인', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'retailer', '성신상인', 1, 1),
+    ('council@sungshin.ac.kr', '성신학생회', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'council', '성신학생회', 1, 1),
+    ('student@konkuk.ac.kr', '건대학생', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'student', '건대학생', 2, 1),
+    ('partner3@gmail.com', '건대상인', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'retailer', '건대상인', 2, 1),
+    ('council@konkuk.ac.kr', '건대학생회', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'council', '건대학생회', 2, 1),
+    ('student@sookmyung.ac.kr', '숙대학생', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'student', '숙대학생', 3, 1),
+    ('partner4@gmail.com', '숙대상인', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'retailer', '숙대상인', 3, 1),
+    ('council@sookmyung.ac.kr', '숙대학생회', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'council', '숙대학생회', 3, 1),
+    ('student@cau.ac.kr', '중대학생', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'student', '중대학생', 4, 1),
+    ('partner5@gmail.com', '중대상인', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'retailer', '중대상인', 4, 1),
+    ('council@cau.ac.kr', '중대학생회', '$2b$10$MCBwQQ7X.rlYbqFkwJLRsONJDtmsmwYAdOLxZ6vTtzTfaH6tQhcRS', 'council', '중대학생회', 4, 1);
+
 
     -- refresh_token 테이블
     CREATE TABLE refresh_token (
