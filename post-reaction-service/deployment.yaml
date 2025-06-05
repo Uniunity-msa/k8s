@@ -35,7 +35,7 @@ spec:
               done
       containers:
       - name: post-reaction-service
-        image: uniunity/post-reaction-service:202506040611
+        image: uniunity/post-reaction-service:202506041804
         ports:
         - containerPort: 3002
         env:
