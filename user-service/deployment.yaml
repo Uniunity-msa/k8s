@@ -51,3 +51,25 @@ spec:
           value: "user_service_db"
         - name: RABBIT
           value: "amqp://guest:guest@rabbitmq:5672"
+        - name: RABBITMQ_HOST
+          value: rabbitmq
+        - name: RABBITMQ_PORT
+          value: "5672"
+        - name: RABBITMQ_USER
+          value: "guest"
+        - name: RABBITMQ_PASSWORD
+          value: "guest"
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3004
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3004
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 3
