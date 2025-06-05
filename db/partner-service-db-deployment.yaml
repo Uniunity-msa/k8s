@@ -44,11 +44,13 @@ spec:
             - mountPath: /docker-entrypoint-initdb.d
               name: init-sql
               readOnly: true
-
       volumes:
         - name: partner-service-db-storage
           persistentVolumeClaim:
             claimName: partner-service-db-pvc
         - name: init-sql
           configMap:
-            name: partner-service-db-init-sql
+            name: partner-init-configmap
+            items:
+              - key: partner-init.sql
+                path: partner-init.sql
