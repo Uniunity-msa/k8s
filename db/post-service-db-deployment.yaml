@@ -41,13 +41,16 @@ spec:
           volumeMounts:
             - name: post-db-storage
               mountPath: /var/lib/mysql
-            - name: initdb
+            - name: init-sql
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
       volumes:
         - name: post-db-storage
           persistentVolumeClaim:
             claimName: post-service-db-pvc
-        - name: initdb
+        - name: init-sql
           configMap:
-            name: post-service-db-init-script
+            name: post-init-configmap
+            items:
+            - key: post-init.sql
+              path: post-init.sql
