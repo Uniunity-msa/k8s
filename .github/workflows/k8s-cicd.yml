@@ -64,7 +64,7 @@ jobs:
         CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
         for service in partner-service post-reaction-service post-service start-service user-service; do
           if echo "$CHANGED" | grep -q "^$service/"; then
-            echo "🛠 변경 감지됨: $service"
+            echo " 변경 감지됨: $service"
             kubectl apply -f $service/deployment.yaml
             kubectl rollout status deployment/$service
             kubectl apply -f $service/service.yaml
@@ -74,7 +74,7 @@ jobs:
         done
         
     - name: Apply Ingress
-      run: kubectl apply -f ingress/ingress.yaml
+      run: kubectl apply --validate=false -f ingress/ingress.yaml
 
     - name: List All Services
       run: kubectl get svc -o wide
