@@ -1,4 +1,4 @@
-name: 'k8s CI/CD to GKE with Kustomize'
+name: 'k8s CI/CD to GKE'
 
 on:
   push:
@@ -35,11 +35,6 @@ jobs:
         cluster_name: '${{ env.GKE_CLUSTER }}'
         location: '${{ env.GKE_ZONE }}'
 
-    - name: Install Kustomize
-      run: |
-        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-        sudo mv kustomize /usr/local/bin
-
     - name: Apply ConfigMaps
       run: |
         echo "Applying ConfigMaps from sql/"
@@ -59,14 +54,13 @@ jobs:
         kubectl apply -f rabbitmq/rabbitmq-deployment.yaml
         kubectl apply -f rabbitmq/rabbitmq-service.yaml
 
-    - name: Deploy Services using Kustomize
+    - name: Deploy Application Services
       run: |
         for service in partner-service post-reaction-service post-service start-service user-service; do
-          echo "Deploying $service with kustomize"
-          cd $service
-          kustomize build . | kubectl apply -f -
+          echo "Deploying $service"
+          kubectl apply -f $service/deployment.yaml
           kubectl rollout status deployment/$service
-          cd ..
+          kubectl apply -f $service/service.yaml
         done
 
     - name: Apply Ingress
