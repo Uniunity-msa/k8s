@@ -54,17 +54,27 @@ jobs:
         kubectl apply -f rabbitmq/rabbitmq-deployment.yaml
         kubectl apply -f rabbitmq/rabbitmq-service.yaml
 
-    - name: Deploy Application Services
-      run: |
-        for service in partner-service post-reaction-service post-service start-service user-service; do
-          echo "Deploying $service"
-          kubectl apply -f $service/deployment.yaml
-          kubectl rollout status deployment/$service
-          kubectl apply -f $service/service.yaml
-        done
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 
 
+    - name: Deploy Application Services (only changed)
+      run: |
+        CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+        for service in partner-service post-reaction-service post-service start-service user-service; do
+          if echo "$CHANGED" | grep -q "^$service/"; then
+            echo " 변경 감지됨: $service"
+            kubectl apply -f $service/deployment.yaml
+            kubectl rollout status deployment/$service
+            kubectl apply -f $service/service.yaml
+          else
+            echo "변경 없음: $service"
+          fi
+        done
+        
     - name: Apply Ingress
-      run: kubectl apply -f ingress/ingress.yaml
+      run: kubectl apply --validate=false -f ingress/ingress.yaml
 
     - name: List All Services
       run: kubectl get svc -o wide
