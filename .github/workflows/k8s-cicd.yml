@@ -32,10 +32,9 @@ jobs:
     - name: Set GKE Credentials
       uses: google-github-actions/get-gke-credentials@v2
       with:
-       cluster_name: '${{ env.GKE_CLUSTER }}'
-       location: '${{ env.GKE_ZONE }}'
-       project_id: '${{ env.PROJECT_ID }}' 
-    
+        cluster_name: '${{ env.GKE_CLUSTER }}'
+        location: '${{ env.GKE_ZONE }}'
+        project_id: '${{ env.PROJECT_ID }}'
 
     - name: Apply ConfigMaps
       run: |
@@ -56,25 +55,20 @@ jobs:
         kubectl apply -f rabbitmq/rabbitmq-deployment.yaml
         kubectl apply -f rabbitmq/rabbitmq-service.yaml
 
-    - name: Checkout Repository
+    - name: Checkout Repository Again
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 
+        fetch-depth: 0
 
-    - name: Deploy Application Services (only changed)
+    - name: Deploy Application Services (All)
       run: |
-        CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
         for service in partner-service post-reaction-service post-service start-service user-service; do
-          if echo "$CHANGED" | grep -q "^$service/"; then
-            echo " 변경 감지됨: $service"
-            kubectl apply -f $service/deployment.yaml
-            kubectl rollout status deployment/$service
-            kubectl apply -f $service/service.yaml
-          else
-            echo "변경 없음: $service"
-          fi
+          echo "배포 중: $service"
+          kubectl apply -f $service/deployment.yaml
+          kubectl rollout status deployment/$service
+          kubectl apply -f $service/service.yaml
         done
-        
+
     - name: Apply Ingress
       run: kubectl apply --validate=false -f ingress/ingress.yaml
 
