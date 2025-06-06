@@ -22,6 +22,8 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
@@ -34,37 +36,66 @@ jobs:
       with:
         cluster_name: '${{ env.GKE_CLUSTER }}'
         location: '${{ env.GKE_ZONE }}'
+        project_id: '${{ env.PROJECT_ID }}'
 
-    - name: Apply ConfigMaps
+    - name: Detect Changed Files
+      id: changes
       run: |
-        echo "Applying ConfigMaps from sql/"
-        for file in sql/*-configmap.yaml; do
-          kubectl apply -f "$file"
-        done
+        echo "CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> $GITHUB_ENV
 
-    - name: Deploy Databases
+    - name: Apply ConfigMaps if Changed
       run: |
-        echo "Deploying databases"
-        for file in db/*.yaml; do
-          kubectl apply -f "$file"
-        done
+        if echo "$CHANGED" | grep -q "^sql/"; then
+          echo "ConfigMap 변경 감지됨, 적용 중..."
+          for file in sql/*-configmap.yaml; do
+            kubectl apply -f "$file"
+          done
+        else
+          echo "ConfigMap 변경 없음"
+        fi
 
-    - name: Deploy RabbitMQ
+    - name: Deploy Databases if Changed
       run: |
-        kubectl apply -f rabbitmq/rabbitmq-deployment.yaml
-        kubectl apply -f rabbitmq/rabbitmq-service.yaml
+        if echo "$CHANGED" | grep -q "^db/"; then
+          echo "DB 리소스 변경 감지됨, 적용 중..."
+          for file in db/*.yaml; do
+            kubectl apply -f "$file"
+          done
+        else
+          echo "DB 리소스 변경 없음"
+        fi
 
-    - name: Deploy Application Services
+    - name: Deploy RabbitMQ if Changed
+      run: |
+        if echo "$CHANGED" | grep -q "^rabbitmq/"; then
+          echo "RabbitMQ 리소스 변경 감지됨, 적용 중..."
+          kubectl apply -f rabbitmq/rabbitmq-deployment.yaml
+          kubectl apply -f rabbitmq/rabbitmq-service.yaml
+        else
+          echo "RabbitMQ 변경 없음"
+        fi
+
+    - name: Deploy Application Services (Only Changed)
       run: |
         for service in partner-service post-reaction-service post-service start-service user-service; do
-          echo "Deploying $service"
-          kubectl apply -f $service/deployment.yaml
-          kubectl rollout status deployment/$service
-          kubectl apply -f $service/service.yaml
+          if echo "$CHANGED" | grep -q "^$service/"; then
+            echo "변경 감지됨: $service"
+            kubectl apply -f $service/deployment.yaml
+            kubectl rollout status deployment/$service
+            kubectl apply -f $service/service.yaml
+          else
+            echo "변경 없음: $service"
+          fi
         done
 
-    - name: Apply Ingress
-      run: kubectl apply -f ingress/ingress.yaml
+    - name: Apply Ingress if Changed
+      run: |
+        if echo "$CHANGED" | grep -q "^ingress/"; then
+          echo "Ingress 변경 감지됨, 적용 중..."
+          kubectl apply --validate=false -f ingress/ingress.yaml
+        else
+          echo "Ingress 변경 없음"
+        fi
 
     - name: List All Services
       run: kubectl get svc -o wide

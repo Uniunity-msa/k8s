@@ -20,7 +20,7 @@ spec:
             - -c
             - |
               until nc -z post-reaction-service-db 3306; do
-                echo "Waiting for post-reaction-service-db…"
+                echo "Waiting for post-reaction-service-db"
                 sleep 2
               done
         - name: wait-for-rabbitmq
