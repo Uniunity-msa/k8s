@@ -25,7 +25,7 @@ spec:
               done
       containers:
       - name: start-service
-        image: uniunity/start-service:202506072208
+        image: uniunity/start-service:202506072236
         imagePullPolicy: Always
         ports:
         - containerPort: 3001
