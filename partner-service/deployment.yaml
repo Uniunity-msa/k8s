@@ -35,7 +35,7 @@ spec:
               done
       containers:
       - name: partner-service
-        image: uniunity/partner-service:202506071721
+        image: uniunity/partner-service:202506080210
         imagePullPolicy: Always
         ports:
         - containerPort: 3003
