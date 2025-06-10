@@ -19,8 +19,8 @@ spec:
             - sh
             - -c
             - |
-              until nc -z post-service-db 3306; do
-                echo "Waiting for post-service-db…"
+              until nc -z partner-service-db 3306; do
+                echo "Waiting for partner-service-db…"
                 sleep 2
               done
         - name: wait-for-rabbitmq
@@ -35,7 +35,7 @@ spec:
               done
       containers:
       - name: post-service
-        image: uniunity/post-service:202506051709
+        image: uniunity/post-service:202506080223
         ports:
         - containerPort: 3000       
         env:
