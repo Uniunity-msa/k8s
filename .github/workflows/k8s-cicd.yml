@@ -54,15 +54,14 @@ jobs:
         kubectl apply -f rabbitmq/rabbitmq-deployment.yaml
         kubectl apply -f rabbitmq/rabbitmq-service.yaml
 
-    - name: Deploy Application Services
+    - name: Deploy Application Services (with Kustomize)
       run: |
         for service in partner-service post-reaction-service post-service start-service user-service; do
-          echo "Deploying $service"
-          kubectl apply -f $service/deployment.yaml
+          echo "Deploying $service with Kustomize"
+          kubectl apply -k $service/
           kubectl rollout status deployment/$service
-          kubectl apply -f $service/service.yaml
-        done
-
+        done    
+        
     - name: Apply Ingress
       run: kubectl apply -f ingress/ingress.yaml
 

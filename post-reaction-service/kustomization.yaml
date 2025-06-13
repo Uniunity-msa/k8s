@@ -1,0 +1,6 @@
+resources:
+  - deployment.yaml
+
+images:
+  - name: uniunity/post-reaction-service
+    newTag: 202506100101

@@ -1,0 +1,6 @@
+resources:
+  - deployment.yaml
+
+images:
+  - name: uniunity/start-service
+    newTag: 202506082113
