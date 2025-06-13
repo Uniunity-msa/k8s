@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: uniunity/post-service
-    newTag: 202506100102
+    newTag: "202506100102"

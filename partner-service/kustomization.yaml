@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: uniunity/partner-service
-    newTag: 202506082103
+    newTag: "202506082103"

@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: uniunity/start-service
-    newTag: 202506082113
+    newTag: "202506082113"

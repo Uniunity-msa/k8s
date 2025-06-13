@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: uniunity/user-service
-    newTag: 202506131205
+    newTag: "202506131205"
