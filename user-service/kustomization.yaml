@@ -4,6 +4,6 @@ resources:
 images:
 - name: uniunity/user-service
   newName: uniunity/user-service
-  newTag: "202506132228"
+  newTag: "202506140144"
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
