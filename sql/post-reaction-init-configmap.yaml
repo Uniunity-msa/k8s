@@ -37,21 +37,5 @@ data:
     ALTER TABLE Heart MODIFY COLUMN created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
     ALTER TABLE Scrap MODIFY COLUMN created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
-    -- 예시 추가
-    INSERT INTO Comment (comment_id, comment_content, comment_date, like_count_comment, user_email, post_id)
-    VALUES
-      (1, '첫 번째 댓글', '2025-04-28', 1, 'student@sungshin.ac.kr', 1),
-      (2, '두 번째 댓글', '2025-04-29', 2, 'student@sungshin.ac.kr', 2);
-
-    -- 예시 추가
-    INSERT INTO Heart (heart_id, created_at, user_email, post_id)
-    VALUES
-      (1, '2025-04-28', '20211138@sungshin.ac.kr', 1),
-      (2, '2025-04-29', '20211138@sungshin.ac.kr', 2);
-
-    -- 예시 추가
-    INSERT INTO Scrap (scrap_id, created_at, user_email, post_id)
-    VALUES
-      (1, '2025-04-28', '20211138@sungshin.ac.kr', 1),
-      (2, '2025-04-29', '20211138@sungshin.ac.kr', 2);
+  
 
