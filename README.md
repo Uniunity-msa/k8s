@@ -100,7 +100,7 @@ unimsa/
  │   └── post-service/
  │
  └── cicd/                 # GitHub Actions 워크플로우
-
+```
 ---
 ## ☸️ 쿠버네티스 설정
 
@@ -161,4 +161,4 @@ unimsa/
 
 ## 📺 데모 영상
 
-[👉 UniUnity 프로젝트 데모 영상 보러가기]([https://example.com/demo-link](https://www.youtube.com/watch?v=r5Sv55nrUzY))  
+[👉 UniUnity 프로젝트 데모 영상 보러가기]([https://example.com/demo-link](https://www.youtube.com/watch?v=r5Sv55nrUzY)
