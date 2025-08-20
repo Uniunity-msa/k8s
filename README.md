@@ -61,7 +61,7 @@ RabbitMQ를 이용한 간접 통신과 JWT 기반 직접 통신을 통해 안정
 
 <div align="center">
 
-| Team Member | Team Member | Team Member |
+| Team Leader | Team Member | Team Member |
 |:---------------------------------------------------------------------:|:-------------------------------------------------------------------:|:----------------------------------------------------------------------:|
 | <img src="https://github.com/pjhyun0225.png" width="150" /> | <img src="https://github.com/KimGeunHye21.png" width="150" /> | <img src="https://github.com/youngseoOh.png" width="150" /> |
 | [박지현](https://github.com/pjhyun0225)<br />Partner-Service 담당 | [김근혜](https://github.com/KimGeunHye21)<br />User-Service 담당 | [오영서](https://github.com/youngseoOh)<br />Post-Reaction-Service 담당 |
@@ -72,6 +72,26 @@ RabbitMQ를 이용한 간접 통신과 JWT 기반 직접 통신을 통해 안정
 | [이채현](https://github.com/chaehyeon02)<br />Start-Service 담당 | [김시현](https://github.com/5IHYUN)<br />Post-Service 담당 | [이지원](https://github.com/JiwonLee42)<br />Post-Reaction-Service 담당 |
 
 </div>
+
+---
+## 📃 팀별 역할
+
+### 1팀 (김시현 오영서 이지원)
+Post-Service, Post-Reaction-Service
+- 카데고리 및 회원 종류 별 게시글 작성 기능 구현
+- Google Cloud를 사용한 이미지 저장
+
+### 2팀 (김근혜 박지현 이채현)
+Partner-Servicc
+- 카카오 지도를 사용한 제휴 가게 및 소상공인 가게 표시
+- 각 학교별 제휴 가게 정보 저장 및 제휴 가게 업로드
+- 공공데이터를 사용한 학교별 소상공인 가게 표시
+User-Service
+- JWT와 Cookie를 사용한 회원 기능 구현
+- 회원 및 대학 정보 통신
+Start-Service
+- 서비스 메인 페이지 구현
+- 학교별 페이지 이동 구현
 
 ---
 
