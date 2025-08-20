@@ -1,6 +1,6 @@
-# UniUnity Server
+# UniUnity
 
-**UniUnity** 프로젝트의 **백엔드 레포지토리**입니다.  
+**UniUnity** 프로젝트의 **k8s 레포지토리**입니다.  
 마이크로서비스 아키텍처(MSA)를 기반으로 서비스가 독립적으로 배포 및 확장 가능하도록 설계되었습니다.  
 
 ## 🛠 Tech Stack
