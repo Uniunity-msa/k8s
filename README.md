@@ -57,19 +57,19 @@ RabbitMQ를 이용한 간접 통신과 JWT 기반 직접 통신을 통해 안정
 | **기타** | ConfigMap, Secret, Ingress |
 
 ---
-
 ## 👤 팀원 소개
 
 <div align="center">
 
-| 팀원 | 담당 역할 |
-|------|-----------|
-| [pjhyun0225](https://github.com/pjhyun0225) | partner-service 담당 |
-| [KimGeunHye21](https://github.com/KimGeunHye21) | user-service 담당 |
-| [youngseoOh](https://github.com/youngseoOh) | post-reaction-service 담당 |
-| [chaehyeon02](https://github.com/chaehyeon02) | start-service 담당 |
-| [5IHYUN](https://github.com/5IHYUN) | post-service 담당 |
-| [JiwonLee42](https://github.com/JiwonLee42) | post-reaction-service 담당 |
+| Team Member | Team Member | Team Member |
+|:---------------------------------------------------------------------:|:-------------------------------------------------------------------:|:----------------------------------------------------------------------:|
+| <img src="https://github.com/pjhyun0225.png" width="150" /> | <img src="https://github.com/KimGeunHye21.png" width="150" /> | <img src="https://github.com/youngseoOh.png" width="150" /> |
+| [박지현](https://github.com/pjhyun0225)<br />Partner-Service 담당 | [김근혜](https://github.com/KimGeunHye21)<br />User-Service 담당 | [오영서](https://github.com/youngseoOh)<br />Post-Reaction-Service 담당 |
+
+| Team Member | Team Member | Team Member |
+|:---------------------------------------------------------------------:|:-------------------------------------------------------------------:|:----------------------------------------------------------------------:|
+| <img src="https://github.com/chaehyeon02.png" width="150" /> | <img src="https://github.com/5IHYUN.png" width="150" /> | <img src="https://github.com/JiwonLee42.png" width="150" /> |
+| [이채현](https://github.com/chaehyeon02)<br />Start-Service 담당 | [김시현](https://github.com/5IHYUN)<br />Post-Service 담당 | [이지원](https://github.com/JiwonLee42)<br />Post-Reaction-Service 담당 |
 
 </div>
 
